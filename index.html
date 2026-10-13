@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#245bc5">
+  <meta name="description" content="Free-first AI Study Agent for SSC, HSC and JSC students">
+  <title>StudyMate AI — AI Study Agent</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">✦</div>
+    <div><h1>StudyMate <span>AI</span></h1><p>তোমার স্মার্ট স্টাডি পার্টনার</p></div>
+    <button id="installBtn" class="btn btn-light hidden" type="button">Install App</button>
+  </header>
+
+  <nav class="tabs" aria-label="Main navigation">
+    <button class="tab active" data-panel="chatPanel">💬 AI Chat</button>
+    <button class="tab" data-panel="voicePanel">🎙️ Voice</button>
+    <button class="tab" data-panel="youtubePanel">▶ Class Search</button>
+    <button class="tab" data-panel="notesPanel">📝 Notes</button>
+  </nav>
+
+  <main>
+    <section class="welcome card">
+      <div><span class="eyebrow">YOUR STUDY SPACE</span><h2>আজ কী শিখবে?</h2>
+      <p>প্রশ্ন করো, বুঝে শেখো, আর দরকারি ক্লাস খুঁজে নাও।</p></div>
+      <div class="welcome-icon">📚</div>
+    </section>
+
+    <section id="chatPanel" class="panel">
+      <div class="section-heading"><div><h2>AI Study Chat</h2><p>বাংলা বা English-এ প্রশ্ন করো</p></div><button id="clearChat" class="btn btn-light">নতুন চ্যাট</button></div>
+      <div id="chatMessages" class="chat-messages" aria-live="polite">
+        <div class="message assistant"><b>StudyMate AI</b><p>আসসালামু আলাইকুম! কোন বিষয়টি বুঝতে সাহায্য করব? 😊</p></div>
+      </div>
+      <div class="quick-prompts">
+        <button class="chip" data-prompt="SSC Physics-এর নিউটনের দ্বিতীয় সূত্র সহজভাবে বুঝিয়ে দাও।">Physics বুঝাও</button>
+        <button class="chip" data-prompt="HSC Biology-এর একটি অধ্যায়ের সারাংশ ও ৫টি MCQ তৈরি করো।">MCQ বানাও</button>
+        <button class="chip" data-prompt="এই বিষয়টি শেখার জন্য ৩০ মিনিটের একটি study plan তৈরি করো।">Study plan</button>
+      </div>
+      <form id="chatForm" class="chat-form">
+        <textarea id="chatInput" rows="2" placeholder="তোমার প্রশ্ন লিখো…" required></textarea>
+        <button class="btn btn-primary" type="submit">পাঠাও ↑</button>
+      </form>
+      <p class="hint">AI-এর উত্তর ভুল হতে পারে—বই/শিক্ষকের সঙ্গে মিলিয়ে নাও।</p>
+      <details class="settings card-subtle">
+        <summary>AI সেটআপ (ঐচ্ছিক)</summary>
+        <p>Gemini API key এই ব্রাউজারে সাময়িকভাবে সংরক্ষিত হবে। এই ডেমোটি শুধু নিজের ডিভাইসে পরীক্ষা করো; public app-এ API key রাখা নিরাপদ নয়।</p>
+        <label for="apiKey">Gemini API key</label>
+        <input id="apiKey" type="password" autocomplete="off" placeholder="API key পেস্ট করো">
+        <label for="modelName">Model ID</label>
+        <input id="modelName" value="gemini-2.5-flash" autocomplete="off">
+        <div class="inline-actions"><button id="saveSettings" class="btn btn-primary" type="button">এই ডিভাইসে সেভ</button><button id="forgetKey" class="btn btn-light" type="button">Key মুছো</button></div>
+        <p class="hint">API key নাও: aistudio.google.com — ফ্রি কোটা/মডেল availability পরিবর্তিত হতে পারে।</p>
+      </details>
+    </section>
+
+    <section id="voicePanel" class="panel hidden">
+      <div class="section-heading"><div><h2>Voice Study Assistant</h2><p>কথা বলো, টেক্সট দেখো, উত্তর শুনো</p></div></div>
+      <div class="voice-card card">
+        <div class="mic-orb" id="micOrb">🎙️</div>
+        <h3 id="voiceStatus">শুরু করতে মাইক্রোফোন চাপো</h3>
+        <p class="hint">Voice recognition ব্রাউজার ও ভাষা অনুযায়ী কাজ করতে পারে।</p>
+        <div class="inline-actions centered"><button id="startListening" class="btn btn-primary">🎙️ কথা বলো</button><button id="stopListening" class="btn btn-light" disabled>থামাও</button></div>
+        <label for="voiceInput">তোমার কথার টেক্সট</label>
+        <textarea id="voiceInput" rows="3" placeholder="মাইক্রোফোনে বলা কথা এখানে আসবে; চাইলে লিখতেও পারো"></textarea>
+        <div class="inline-actions"><button id="askVoice" class="btn btn-primary">AI-কে জিজ্ঞেস করো</button><button id="speakAnswer" class="btn btn-light">🔊 শেষ উত্তর শোনো</button></div>
+        <div id="voiceAnswer" class="answer-box">তোমার AI উত্তর এখানে দেখা যাবে।</div>
+      </div>
+    </section>
+
+    <section id="youtubePanel" class="panel hidden">
+      <div class="section-heading"><div><h2>YouTube Class Finder</h2><p>SSC / HSC / JSC ক্লাস খুঁজে নাও</p></div></div>
+      <form id="youtubeForm" class="card search-form">
+        <label for="level">পরীক্ষা/লেভেল</label>
+        <select id="level"><option>SSC</option><option>HSC</option><option>JSC</option></select>
+        <label for="subject">বিষয়</label>
+        <select id="subject"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Higher Math</option><option>General Math</option><option>English</option><option>Bangla</option><option>ICT</option><option>General Science</option><option>বাংলাদেশ ও বিশ্বপরিচয়</option></select>
+        <label for="chapter">অধ্যায় / টপিক (ঐচ্ছিক)</label>
+        <input id="chapter" placeholder="যেমন: নিউটনের সূত্র / Trigonometry">
+        <label for="teacher">শিক্ষক/চ্যানেল (ঐচ্ছিক)</label>
+        <input id="teacher" placeholder="কোনো শিক্ষক বা চ্যানেলের নাম">
+        <div class="inline-actions"><button class="btn btn-primary" type="submit">YouTube-এ খুঁজো ↗</button><button id="saveYoutubeKeyToggle" class="btn btn-light" type="button">API key সেটিংস</button></div>
+        <div id="youtubeKeyBox" class="hidden">
+          <label for="youtubeKey">YouTube Data API key</label><input id="youtubeKey" type="password" placeholder="API key পেস্ট করো">
+          <button id="saveYoutubeKey" class="btn btn-primary" type="button">এই ডিভাইসে সেভ</button>
+          <p class="hint">API key না থাকলেও YouTube search-এ যাবে। API key পেলে অ্যাপের ভেতরে ভিডিও রেজাল্ট দেখাবে।</p>
+        </div>
+      </form>
+      <div id="youtubeResults" class="results"><p class="empty-state">সার্চ করলে ক্লাস এখানে দেখাবে।</p></div>
+    </section>
+
+    <section id="notesPanel" class="panel hidden">
+      <div class="section-heading"><div><h2>আমার নোট</h2><p>এই ডিভাইসেই সেভ হবে</p></div></div>
+      <form id="notesForm" class="card">
+        <label for="noteTitle">নোটের শিরোনাম</label><input id="noteTitle" required placeholder="যেমন: Physics Chapter 1">
+        <label for="noteBody">নোট</label><textarea id="noteBody" rows="5" required placeholder="এখানে তোমার নোট লিখো…"></textarea>
+        <button class="btn btn-primary" type="submit">নোট সেভ করো</button>
+      </form>
+      <div id="notesList" class="notes-list"></div>
+    </section>
+    <footer><p>StudyMate AI • Free-first student project</p><p>ব্যক্তিগত পড়াশোনার সহায়ক; পরীক্ষার উত্তর যাচাই করে নিও।</p></footer>
+  </main>
+  <div id="toast" role="status" class="toast hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>
